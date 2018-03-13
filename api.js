@@ -3,6 +3,8 @@ var express = require('express');
 var app = express();
 var ig = require('instagram-node').instagram();
 var accessToken, user;
+global.db = require('./db');
+
 //location of our static files(css,js,etc..)
 app.use(express.static(__dirname + '/public'));
 
@@ -34,8 +36,13 @@ app.get('/handleAuth', function(req, res){
 
     user = result.user;
 
+
     ig.use({
       access_token : accessToken
+    });
+
+    global.db.insert(user, function(err, result) {
+      if(err) { return console.log(err); }
     });
 
     // After getting the access_token redirect to the '/' route
@@ -43,6 +50,13 @@ app.get('/handleAuth', function(req, res){
   });
 });
 
+
+app.get('/users', function(req, res){
+  global.db.findAll( function(e, docs) {
+    if(e) { return console.log(e); }
+    res.render('pages/users', { title: 'Lista de Clientes', docs: docs });
+  });
+});
 
 app.get('/', function(req, res){
   // create a new instance of the use method which contains the access token gotten

@@ -17,3 +17,17 @@ npm start
 ````
 
 Your project will be running at `localhost:8000`
+
+### Database
+Install MongoDB and create the dbpath.
+
+````
+mongod
+````
+
+Let it running.
+
+In another window, create the database.
+````
+use instaslider
+````
